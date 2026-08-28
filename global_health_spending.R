@@ -2,8 +2,9 @@ library(tidyverse)
 library(gtsummary)
 library(dplyr)
 library(readr)
-health_spending <- read_csv("health_spending.csv")
+health_spending <- read_csv("~/RSPH Classes/EPI590R RStudio/final-project/final-project/repository/health_spending.csv")
 View(health_spending)
+
 
 #How has the balance between government, private, and external aid changed over time in Guyana and Haiti?
 
@@ -19,8 +20,25 @@ health_spending_wide <- health_spending_filtered %>%
 		values_from = value
 	) #Guyana and Haiti and fill them with whatever in value
 
+tbl_summary(
+	health_spending_wide,
+	by = country_name, include = c(ext_che, gghed_che, pvtd_che),
+	label = list( ext_che ~ "External aid %",
+								gghed_che ~ "Government aid %",
+								pvtd_che ~ "Private aid %"),
+	missing_text = "Missing") |>
+	add_p(test = list(
+		all_continuous() ~ "t.test",
+		all_categorical() ~ "chisq.test")) |>
+		add_overall(col_label = "**Total**") |>
+			bold_labels() |>
+			remove_footnote_header()|>
+			modify_header(
+				label = "**Type of Aid**",
+				p.value = "**P-value**") |>
+			modify_caption("Aid Percentage")
 
-#Fit a regression and present well-formatted results from the regression
+o#Fit a regression and present well-formatted results from the regression
 
 linear_model <- (lm(ext_che ~ year * country_name, data = health_spending_wide))
 
@@ -60,4 +78,4 @@ ext_guyana <- c(guyana_row$ext_che)
 new_mean( x = c(ext_haiti))
 new_mean( x = c(ext_guyana))
 
-#new_mean(health_spending_wide$ext_che)
+
