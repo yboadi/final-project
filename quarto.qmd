@@ -44,33 +44,31 @@ table1 <- tbl_summary(
   include = c(year, ext_che, gghed_che, pvtd_che),
   label = list(
     ext_che ~ "External aid %",
-    gghed_che ~ "Government aid %"
+    gghed_che ~ "Government aid %",
+    pvtd_che ~ "Private aid %"
   ),
   missing_text = "Missing"
 )
 ```
-
 
 
 ```{r}
-#Customization of `tbl_summary()`
-#| echo: false
+library(ggplot2) 
 
-#| label: tbl-one
-#| tbl-cap: "Table one"
-table1 <- tbl_summary(
-  health_spending_wide, 
-  by = country_name, 
-  include = c(year, ext_che, gghed_che, pvtd_che),
-  label = list(
-    ext_che ~ "External aid %",
-    gghed_che ~ "Government aid %"
-  ),
-  missing_text = "Missing"
-)
+#Create the scatter plot 
 
-table1
+ggplot (data = health_spending_wide, mapping = aes (x = year, y = ext_che, color = country_name)) + geom_point(size = 3) +
+	labs (title = "External Aid Share of Health Spending Over Time",
+				x = "Years",
+				y = "External Share of CHE (%)",
+				color = "Country Name") +
+	theme_minimal()
+
+#| label: fig-scatterplot
+#| fig-cap: This scatterplot shows the relationship between Guyana and Haiti's external aid use (in percentage)
 ```
+
+
 ```{r}
 linear_model <- (lm(ext_che ~ year * country_name, data = health_spending_wide))
 
@@ -78,7 +76,7 @@ tbl_regression(linear_model, intercept = TRUE,
 							 label = list(year ~ "Year (trend)",
 							 						 country_name ~ "Country",
 							 						 `year:country_name` ~ "Trend difference (Haiti vs Guyana"))
-library(ggplot2)
+
 ggplot(health_spending_wide, aes(x = year, y = ext_che, color = country_name)) +
 	geom_point(alpha = 0.4) + #draws the actual data as dots, positioning the x & y. alpha controls the transparency
 	geom_smooth(method = "lm", se = TRUE) + #visusallizes your regression. method = fits the straight line linear regression. se = is standard error
@@ -91,4 +89,6 @@ ggplot(health_spending_wide, aes(x = year, y = ext_che, color = country_name)) +
 #| label: fig-regression
 #| fig-cap: The regression analysis shows the relationship between external aid use (in percentage) between Haiti and Guyana. 
 ```
+
+
 

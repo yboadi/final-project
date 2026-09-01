@@ -174,47 +174,58 @@ dbl (2): year, value
 <span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">include =</span> <span class="fu">c</span>(year, ext_che, gghed_che, pvtd_che),</span>
 <span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
 <span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    ext_che <span class="sc">~</span> <span class="st">"External aid %"</span>,</span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    gghed_che <span class="sc">~</span> <span class="st">"Government aid %"</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing_text =</span> <span class="st">"Missing"</span></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    gghed_che <span class="sc">~</span> <span class="st">"Government aid %"</span>,</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    pvtd_che <span class="sc">~</span> <span class="st">"Private aid %"</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing_text =</span> <span class="st">"Missing"</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Customization of `tbl_summary()`</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-one</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Table one"</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>table1 <span class="ot">&lt;-</span> <span class="fu">tbl_summary</span>(</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  health_spending_wide, </span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> country_name, </span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">include =</span> <span class="fu">c</span>(year, ext_che, gghed_che, pvtd_che),</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    ext_che <span class="sc">~</span> <span class="st">"External aid %"</span>,</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    gghed_che <span class="sc">~</span> <span class="st">"Government aid %"</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing_text =</span> <span class="st">"Missing"</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>table1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Create the scatter plot </span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span> (<span class="at">data =</span> health_spending_wide, <span class="at">mapping =</span> <span class="fu">aes</span> (<span class="at">x =</span> year, <span class="at">y =</span> ext_che, <span class="at">color =</span> country_name)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span> (<span class="at">title =</span> <span class="st">"External Aid Share of Health Spending Over Time"</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">x =</span> <span class="st">"Years"</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="st">"External Share of CHE (%)"</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"Country Name"</span>) <span class="sc">+</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div id="vofqssbwne" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vofqssbwne table {
+<div>
+<figure class="figure">
+<p><img src="quarto_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-scatterplot</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: This scatterplot shows the relationship between Guyana and Haiti's external aid use (in percentage)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> (<span class="fu">lm</span>(ext_che <span class="sc">~</span> year <span class="sc">*</span> country_name, <span class="at">data =</span> health_spending_wide))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(linear_model, <span class="at">intercept =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">label =</span> <span class="fu">list</span>(year <span class="sc">~</span> <span class="st">"Year (trend)"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                                                     country_name <span class="sc">~</span> <span class="st">"Country"</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                                                     <span class="st">`</span><span class="at">year:country_name</span><span class="st">`</span> <span class="sc">~</span> <span class="st">"Trend difference (Haiti vs Guyana"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="goxsiovtau" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#goxsiovtau table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vofqssbwne thead, #vofqssbwne tbody, #vofqssbwne tfoot, #vofqssbwne tr, #vofqssbwne td, #vofqssbwne th {
+#goxsiovtau thead, #goxsiovtau tbody, #goxsiovtau tfoot, #goxsiovtau tr, #goxsiovtau td, #goxsiovtau th {
   border-style: none;
 }
 
-#vofqssbwne p {
+#goxsiovtau p {
   margin: 0;
   padding: 0;
 }
 
-#vofqssbwne .gt_table {
+#goxsiovtau .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -240,12 +251,12 @@ dbl (2): year, value
   border-left-color: #D3D3D3;
 }
 
-#vofqssbwne .gt_caption {
+#goxsiovtau .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vofqssbwne .gt_title {
+#goxsiovtau .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -257,7 +268,7 @@ dbl (2): year, value
   border-bottom-width: 0;
 }
 
-#vofqssbwne .gt_subtitle {
+#goxsiovtau .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -269,7 +280,7 @@ dbl (2): year, value
   border-top-width: 0;
 }
 
-#vofqssbwne .gt_heading {
+#goxsiovtau .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -281,13 +292,13 @@ dbl (2): year, value
   border-right-color: #D3D3D3;
 }
 
-#vofqssbwne .gt_bottom_border {
+#goxsiovtau .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vofqssbwne .gt_col_headings {
+#goxsiovtau .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -302,7 +313,7 @@ dbl (2): year, value
   border-right-color: #D3D3D3;
 }
 
-#vofqssbwne .gt_col_heading {
+#goxsiovtau .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -322,7 +333,7 @@ dbl (2): year, value
   overflow-x: hidden;
 }
 
-#vofqssbwne .gt_column_spanner_outer {
+#goxsiovtau .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -334,15 +345,15 @@ dbl (2): year, value
   padding-right: 4px;
 }
 
-#vofqssbwne .gt_column_spanner_outer:first-child {
+#goxsiovtau .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vofqssbwne .gt_column_spanner_outer:last-child {
+#goxsiovtau .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vofqssbwne .gt_column_spanner {
+#goxsiovtau .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -354,11 +365,11 @@ dbl (2): year, value
   width: 100%;
 }
 
-#vofqssbwne .gt_spanner_row {
+#goxsiovtau .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vofqssbwne .gt_group_heading {
+#goxsiovtau .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -384,7 +395,7 @@ dbl (2): year, value
   text-align: left;
 }
 
-#vofqssbwne .gt_empty_group_heading {
+#goxsiovtau .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -399,15 +410,15 @@ dbl (2): year, value
   vertical-align: middle;
 }
 
-#vofqssbwne .gt_from_md > :first-child {
+#goxsiovtau .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vofqssbwne .gt_from_md > :last-child {
+#goxsiovtau .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vofqssbwne .gt_row {
+#goxsiovtau .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -426,7 +437,7 @@ dbl (2): year, value
   overflow-x: hidden;
 }
 
-#vofqssbwne .gt_stub {
+#goxsiovtau .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -439,512 +450,7 @@ dbl (2): year, value
   padding-right: 5px;
 }
 
-#vofqssbwne .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#vofqssbwne .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#vofqssbwne .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#vofqssbwne .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#vofqssbwne .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#vofqssbwne .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#vofqssbwne .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#vofqssbwne .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#vofqssbwne .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#vofqssbwne .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#vofqssbwne .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#vofqssbwne .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#vofqssbwne .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#vofqssbwne .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#vofqssbwne .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#vofqssbwne .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#vofqssbwne .gt_left {
-  text-align: left;
-}
-
-#vofqssbwne .gt_center {
-  text-align: center;
-}
-
-#vofqssbwne .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#vofqssbwne .gt_font_normal {
-  font-weight: normal;
-}
-
-#vofqssbwne .gt_font_bold {
-  font-weight: bold;
-}
-
-#vofqssbwne .gt_font_italic {
-  font-style: italic;
-}
-
-#vofqssbwne .gt_super {
-  font-size: 65%;
-}
-
-#vofqssbwne .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#vofqssbwne .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#vofqssbwne .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#vofqssbwne .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#vofqssbwne .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#vofqssbwne .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#vofqssbwne .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#vofqssbwne .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#vofqssbwne div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-
-<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="gt_col_headings header">
-<th id="label" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
-<th id="stat_1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>Guyana</strong><br>
-N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-<th id="stat_2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>Haiti</strong><br>
-N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">year</td>
-<td class="gt_row gt_center" headers="stat_1">2,012 (2,006, 2,018)</td>
-<td class="gt_row gt_center" headers="stat_2">2,012 (2,006, 2,018)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">External aid %</td>
-<td class="gt_row gt_center" headers="stat_1">5 (2, 14)</td>
-<td class="gt_row gt_center" headers="stat_2">37 (34, 47)</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">Government aid %</td>
-<td class="gt_row gt_center" headers="stat_1">54 (48, 62)</td>
-<td class="gt_row gt_center" headers="stat_2">12 (11, 18)</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">pvtd_che</td>
-<td class="gt_row gt_center" headers="stat_1">38 (34, 41)</td>
-<td class="gt_row gt_center" headers="stat_2">47 (40, 50)</td>
-</tr>
-</tbody><tfoot>
-<tr class="gt_footnotes odd">
-<td colspan="3" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Median (Q1, Q3)</td>
-</tr>
-</tfoot>
-
-</table>
-
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> (<span class="fu">lm</span>(ext_che <span class="sc">~</span> year <span class="sc">*</span> country_name, <span class="at">data =</span> health_spending_wide))</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(linear_model, <span class="at">intercept =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">label =</span> <span class="fu">list</span>(year <span class="sc">~</span> <span class="st">"Year (trend)"</span>,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                                                     country_name <span class="sc">~</span> <span class="st">"Country"</span>,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                                                     <span class="st">`</span><span class="at">year:country_name</span><span class="st">`</span> <span class="sc">~</span> <span class="st">"Trend difference (Haiti vs Guyana"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div id="vjsmauzfqj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vjsmauzfqj table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#vjsmauzfqj thead, #vjsmauzfqj tbody, #vjsmauzfqj tfoot, #vjsmauzfqj tr, #vjsmauzfqj td, #vjsmauzfqj th {
-  border-style: none;
-}
-
-#vjsmauzfqj p {
-  margin: 0;
-  padding: 0;
-}
-
-#vjsmauzfqj .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#vjsmauzfqj .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#vjsmauzfqj .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#vjsmauzfqj .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#vjsmauzfqj .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#vjsmauzfqj .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#vjsmauzfqj .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#vjsmauzfqj .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#vjsmauzfqj .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#vjsmauzfqj .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#vjsmauzfqj .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#vjsmauzfqj .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#vjsmauzfqj .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#vjsmauzfqj .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#vjsmauzfqj .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#vjsmauzfqj .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#vjsmauzfqj .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#vjsmauzfqj .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#vjsmauzfqj .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#vjsmauzfqj .gt_stub_row_group {
+#goxsiovtau .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -958,15 +464,15 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
   vertical-align: top;
 }
 
-#vjsmauzfqj .gt_row_group_first td {
+#goxsiovtau .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vjsmauzfqj .gt_row_group_first th {
+#goxsiovtau .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vjsmauzfqj .gt_summary_row {
+#goxsiovtau .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -976,16 +482,16 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
   padding-right: 5px;
 }
 
-#vjsmauzfqj .gt_first_summary_row {
+#goxsiovtau .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vjsmauzfqj .gt_first_summary_row.thick {
+#goxsiovtau .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vjsmauzfqj .gt_last_summary_row {
+#goxsiovtau .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -995,7 +501,7 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
   border-bottom-color: #D3D3D3;
 }
 
-#vjsmauzfqj .gt_grand_summary_row {
+#goxsiovtau .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1005,7 +511,7 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
   padding-right: 5px;
 }
 
-#vjsmauzfqj .gt_first_grand_summary_row {
+#goxsiovtau .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1015,7 +521,7 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
   border-top-color: #D3D3D3;
 }
 
-#vjsmauzfqj .gt_last_grand_summary_row_top {
+#goxsiovtau .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1025,11 +531,11 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
   border-bottom-color: #D3D3D3;
 }
 
-#vjsmauzfqj .gt_striped {
+#goxsiovtau .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vjsmauzfqj .gt_table_body {
+#goxsiovtau .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1038,7 +544,7 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
   border-bottom-color: #D3D3D3;
 }
 
-#vjsmauzfqj .gt_footnotes {
+#goxsiovtau .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1052,7 +558,7 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
   border-right-color: #D3D3D3;
 }
 
-#vjsmauzfqj .gt_footnote {
+#goxsiovtau .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1061,7 +567,7 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
   padding-right: 5px;
 }
 
-#vjsmauzfqj .gt_sourcenotes {
+#goxsiovtau .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1075,7 +581,7 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
   border-right-color: #D3D3D3;
 }
 
-#vjsmauzfqj .gt_sourcenote {
+#goxsiovtau .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1083,72 +589,72 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
   padding-right: 5px;
 }
 
-#vjsmauzfqj .gt_left {
+#goxsiovtau .gt_left {
   text-align: left;
 }
 
-#vjsmauzfqj .gt_center {
+#goxsiovtau .gt_center {
   text-align: center;
 }
 
-#vjsmauzfqj .gt_right {
+#goxsiovtau .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vjsmauzfqj .gt_font_normal {
+#goxsiovtau .gt_font_normal {
   font-weight: normal;
 }
 
-#vjsmauzfqj .gt_font_bold {
+#goxsiovtau .gt_font_bold {
   font-weight: bold;
 }
 
-#vjsmauzfqj .gt_font_italic {
+#goxsiovtau .gt_font_italic {
   font-style: italic;
 }
 
-#vjsmauzfqj .gt_super {
+#goxsiovtau .gt_super {
   font-size: 65%;
 }
 
-#vjsmauzfqj .gt_footnote_marks {
+#goxsiovtau .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vjsmauzfqj .gt_asterisk {
+#goxsiovtau .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vjsmauzfqj .gt_indent_1 {
+#goxsiovtau .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vjsmauzfqj .gt_indent_2 {
+#goxsiovtau .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vjsmauzfqj .gt_indent_3 {
+#goxsiovtau .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vjsmauzfqj .gt_indent_4 {
+#goxsiovtau .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vjsmauzfqj .gt_indent_5 {
+#goxsiovtau .gt_indent_5 {
   text-indent: 25px;
 }
 
-#vjsmauzfqj .katex-display {
+#goxsiovtau .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#vjsmauzfqj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#goxsiovtau div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1228,15 +734,14 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
 
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(health_spending_wide, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> ext_che, <span class="at">color =</span> country_name)) <span class="sc">+</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span> <span class="co">#draws the actual data as dots, positioning the x &amp; y. alpha controls the transparency</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="co">#visusallizes your regression. method = fits the straight line linear regression. se = is standard error</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">"External Aid Share of Health Spending Over Time"</span>,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"External Share of CHE (5)"</span>,</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">"Country"</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(health_spending_wide, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> ext_che, <span class="at">color =</span> country_name)) <span class="sc">+</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span> <span class="co">#draws the actual data as dots, positioning the x &amp; y. alpha controls the transparency</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="co">#visusallizes your regression. method = fits the straight line linear regression. se = is standard error</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">"External Aid Share of Health Spending Over Time"</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"External Share of CHE (5)"</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">"Country"</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
@@ -1247,8 +752,8 @@ N = 24<span class="gt_footnote_marks" style="white-space:nowrap;font-style:itali
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-regression</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: The regression analysis shows the relationship between external aid use (in percentage) between Haiti and Guyana. </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-regression</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: The regression analysis shows the relationship between external aid use (in percentage) between Haiti and Guyana. </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 </main>
