@@ -1,0 +1,94 @@
+---
+title: "Rbootcamp_final"
+author: "Yvonne Boadi"
+format: html
+editor: visual
+execute: 
+  echo: true 
+  error: true
+---
+```{r}
+library(tidyverse)
+library(gtsummary)
+library(dplyr)
+library(readr)
+health_spending <- read_csv("~/RSPH Classes/EPI590R RStudio/final-project/final-project/repository/health_spending.csv")
+View(health_spending)
+```
+```{r}
+#The data tracks how much countries spend on health care, where the money comes from (government, private, or external sources), how it is channelled through financing schemes (e.g. government programmes, voluntary insurance, out-of-pocket payments), and what it is spent on (e.g. curative care, preventive care, medical goods). How health systems are funded and how resources are allocated directly shapes health outcomes, progress toward universal health coverage, and whether households face financial hardship when accessing care. These indicators are essential to inform health policy decisions.
+```
+
+```{r}
+#| message: false
+#| warning: false
+
+
+health_spending_filtered <- health_spending %>%
+  filter(country_name %in% c("Guyana", "Haiti")) 
+
+health_spending_wide <- health_spending_filtered %>%
+	pivot_wider( #takes values from one column and spreads them out into new columns, using another column to supply the new column names
+		id_cols = c(country_name, year), #
+		names_from = indicator_code,
+		values_from = value
+	)
+
+#| echo: false
+
+#| label: tbl-one
+#| tbl-cap: "Table one"
+table1 <- tbl_summary(
+  health_spending_wide, 
+  by = country_name, 
+  include = c(year, ext_che, gghed_che, pvtd_che),
+  label = list(
+    ext_che ~ "External aid %",
+    gghed_che ~ "Government aid %"
+  ),
+  missing_text = "Missing"
+)
+```
+
+
+
+```{r}
+#Customization of `tbl_summary()`
+#| echo: false
+
+#| label: tbl-one
+#| tbl-cap: "Table one"
+table1 <- tbl_summary(
+  health_spending_wide, 
+  by = country_name, 
+  include = c(year, ext_che, gghed_che, pvtd_che),
+  label = list(
+    ext_che ~ "External aid %",
+    gghed_che ~ "Government aid %"
+  ),
+  missing_text = "Missing"
+)
+
+table1
+```
+```{r}
+linear_model <- (lm(ext_che ~ year * country_name, data = health_spending_wide))
+
+tbl_regression(linear_model, intercept = TRUE,
+							 label = list(year ~ "Year (trend)",
+							 						 country_name ~ "Country",
+							 						 `year:country_name` ~ "Trend difference (Haiti vs Guyana"))
+library(ggplot2)
+ggplot(health_spending_wide, aes(x = year, y = ext_che, color = country_name)) +
+	geom_point(alpha = 0.4) + #draws the actual data as dots, positioning the x & y. alpha controls the transparency
+	geom_smooth(method = "lm", se = TRUE) + #visusallizes your regression. method = fits the straight line linear regression. se = is standard error
+	labs(
+		title = "External Aid Share of Health Spending Over Time",
+		x = "Year", y = "External Share of CHE (5)",
+		color = "Country"
+	)
+
+#| label: fig-regression
+#| fig-cap: The regression analysis shows the relationship between external aid use (in percentage) between Haiti and Guyana. 
+```
+

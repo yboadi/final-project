@@ -20,9 +20,6 @@ health_spending_wide <- health_spending_filtered %>%
 		values_from = value
 	) #Guyana and Haiti and fill them with whatever in value
 
-#convert year to categorical (went back to numeric)
-health_spending_wide$year <- as.numeric(health_spending_wide$year)
-
 tbl_summary(
 	health_spending_wide,
 	by = country_name, include = c(ext_che, gghed_che, pvtd_che),
@@ -40,7 +37,7 @@ tbl_summary(
 				p.value = "**P-value**") |>
 			modify_caption("Aid Percentage Comparsion")
 
-o#Fit a regression and present well-formatted results from the regression
+#Fit a regression and present well-formatted results from the regression
 
 linear_model <- (lm(ext_che ~ year * country_name, data = health_spending_wide))
 linear_model
@@ -82,5 +79,6 @@ ext_guyana <- c(guyana_row$ext_che)
 
 new_mean( x = c(ext_haiti))
 new_mean( x = c(ext_guyana))
+
 
 
