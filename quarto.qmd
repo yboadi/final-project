@@ -91,4 +91,16 @@ ggplot(health_spending_wide, aes(x = year, y = ext_che, color = country_name)) +
 ```
 
 
+```{r}
+lin_reg <- tbl_regression(linear_model, intercept = TRUE,
+							 label = list(year ~ "Year (trend)",
+							 						 country_name ~ "Country",
+							 						 `year:country_name` ~ "Trend difference (Haiti vs Guyana"))
+lin_reg
+
+coef_marker <- inline_text(lin_reg, variable = "(Intercept)", pattern = "{estimate} ({conf.low}, {conf.high})")
+coef_marker
+
+The correlation coeffienct 
+```
 
