@@ -27,12 +27,13 @@ View(health_spending)
 health_spending_filtered <- health_spending %>%
   filter(country_name %in% c("Guyana", "Haiti")) 
 
-health_spending_wide <- health_spending_filtered %>%
+health_spending_wide <- health_spending_filtered |>
 	pivot_wider( #takes values from one column and spreads them out into new columns, using another column to supply the new column names
 		id_cols = c(country_name, year), #
 		names_from = indicator_code,
 		values_from = value
-	)
+	) |>
+	mutate ( year_centered = year - (mean(year)))
 
 #| echo: false
 
@@ -49,6 +50,11 @@ table1 <- tbl_summary(
   ),
   missing_text = "Missing"
 )
+table1
+
+?inline_text()
+
+The median and interquile range for Guyana is `r table1, variable = ext_che, column = Guyana$country_name`
 ```
 
 
@@ -70,14 +76,14 @@ ggplot (data = health_spending_wide, mapping = aes (x = year, y = ext_che, color
 
 
 ```{r}
-linear_model <- (lm(ext_che ~ year * country_name, data = health_spending_wide))
+linear_model <- (lm(ext_che ~ year_centered * country_name, data = health_spending_wide))
 
 tbl_regression(linear_model, intercept = TRUE,
-							 label = list(year ~ "Year (trend)",
+							 label = list(year_centered ~ "Year (trend)",
 							 						 country_name ~ "Country",
-							 						 `year:country_name` ~ "Trend difference (Haiti vs Guyana"))
+							 						 `year_centered:country_name` ~ "Trend difference (Haiti vs Guyana"))
 
-ggplot(health_spending_wide, aes(x = year, y = ext_che, color = country_name)) +
+ggplot(health_spending_wide, aes(x = year_centered, y = ext_che, color = country_name)) +
 	geom_point(alpha = 0.4) + #draws the actual data as dots, positioning the x & y. alpha controls the transparency
 	geom_smooth(method = "lm", se = TRUE) + #visusallizes your regression. method = fits the straight line linear regression. se = is standard error
 	labs(
@@ -93,14 +99,15 @@ ggplot(health_spending_wide, aes(x = year, y = ext_che, color = country_name)) +
 
 ```{r}
 lin_reg <- tbl_regression(linear_model, intercept = TRUE,
-							 label = list(year ~ "Year (trend)",
+							 label = list(year_centered ~ "Year (trend)",
 							 						 country_name ~ "Country",
-							 						 `year:country_name` ~ "Trend difference (Haiti vs Guyana"))
+							 						 `year_centered:country_name` ~ "Trend difference (Haiti vs Guyana"))
 lin_reg
 
 coef_marker <- inline_text(lin_reg, variable = "(Intercept)", pattern = "{estimate} ({conf.low}, {conf.high})")
 coef_marker
 
-The correlation coeffienct 
+The Intercept from the table is 
 ```
+
 
