@@ -13,7 +13,8 @@ library(tidyverse)
 library(gtsummary)
 library(dplyr)
 library(readr)
-health_spending <- read_csv("~/RSPH Classes/EPI590R RStudio/final-project/final-project/repository/health_spending.csv")
+library(here)
+health_spending <- read_csv(here::here(("health_spending.csv")))
 View(health_spending)
 ```
 ```{r}
@@ -36,7 +37,7 @@ health_spending_wide <- health_spending_filtered |>
 		names_from = indicator_code,
 		values_from = value
 	) |>
-	mutate ( year_centered = year - (mean(year)))
+	mutate ( year_centered = year - (mean(year))) #center and refit to make numbers more meaningful
 
 
 table1 <- tbl_summary(
@@ -49,7 +50,7 @@ table1 <- tbl_summary(
     pvtd_che ~ "Private aid %"
   ),
   missing_text = "Missing"
-)
+) #gtsummary table of descriptive statistics about the data set
 table1
 
 
@@ -68,20 +69,20 @@ This table shows the median and interquile ranges for the external, government a
 
 library(ggplot2) 
 
-#Create the scatter plot 
+#Create the scatter plot (Create a figure)
 
-
-
-ggplot (data = health_spending_wide, mapping = aes (x = year, y = ext_che, color = country_name)) + geom_point(size = 3) +
+interaction_plot <- ggplot (data = health_spending_wide, mapping = aes (x = year, y = ext_che, color = country_name)) + geom_point(size = 3) +
 	labs (title = "External Aid Share of Health Spending Over Time",
 				x = "Years",
 				y = "External Share of CHE (%)",
 				color = "Country Name") +
 	theme_minimal()
 
+interaction_plot 
 
+ggsave(filename = here ("output", "interaction_plot.png"), plot = interaction_plot, create.dir = TRUE)
 ```
-@fig-scatterplot shows the years and external share of CHE in percentage and @fig-regression indicates that overtime, Haiti's external aid utilization increased.
+@fig-scatterplot shows the years and external share of CHE in percentage and @fig-regression indicates that Haiti use of external aid has increased as time increased. While, Guyana's use of external aid has decreased  by an estimated 0.35 percentage points per year. However it is not statistically significant (p = 0.20, 95% CI: -0.87 to 0.16). Overall, Haiti's yearly trend was estimated to be 0.58 percentage points higher than Guyana, however, the trend shows to not be statistically significant (0.11; 95% CI: -0.14 to 1.3)
 
 ```{r}
 #| label: fig-regression
@@ -102,7 +103,32 @@ ggplot(health_spending_wide, aes(x = year_centered, y = ext_che, color = country
 		x = "Year", y = "External Share of CHE (5)",
 		color = "Country"
 	)
+
+
 ```
+
+```{r}
+#Write and use a function that does something with the data
+haiti_row <- health_spending_wide |>
+	filter(country_name %in% c("Haiti")
+	) #created dataset with just haiti rows
+
+guyana_row <- health_spending_wide |>
+	filter(country_name %in% c("Guyana")
+	) ##created dataset with just guyana rows
+
+ext_haiti <- c(haiti_row$ext_che)
+ext_guyana <- c(guyana_row$ext_che)
+
+annual_change <- function(x) {
+	change <- (last(x) - first(x)) / (length(x) - 1) #dividing total change by the number of years
+return(change)
+}
+
+annual_change(ext_haiti)
+annual_change(ext_guyana)
+```
+
 
 
 ```{r}
@@ -115,7 +141,6 @@ lin_reg
 
 coef_marker <- inline_text(lin_reg, variable = "(Intercept)", pattern = "{estimate} ({conf.low}, {conf.high})")
 coef_marker
-
 ```
 
 
