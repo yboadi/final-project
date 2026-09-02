@@ -23,9 +23,9 @@ View(health_spending)
 
 ```{r}
 #| label: tbl-one
-#| tbl-cap: "My Table Caption"
-#| message: true
-#| warning: true
+#| tbl-cap: "Descriptive Statistics for Guyana and Haiti's aid use"
+#| message: False
+#| warning: False
 
 
 health_spending_filtered <- health_spending %>%
