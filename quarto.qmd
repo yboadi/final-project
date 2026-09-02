@@ -1,10 +1,11 @@
 ---
 title: "Rbootcamp_final"
 author: "Yvonne Boadi"
-format: html
-editor: visual
+format: 
+  html:
+   theme: yeti
 execute: 
-  echo: true 
+  echo: false 
   error: true
 ---
 ```{r}
@@ -20,8 +21,10 @@ View(health_spending)
 ```
 
 ```{r}
-#| message: false
-#| warning: false
+#| label: tbl-one
+#| tbl-cap: "My Table Caption"
+#| message: true
+#| warning: true
 
 
 health_spending_filtered <- health_spending %>%
@@ -35,10 +38,7 @@ health_spending_wide <- health_spending_filtered |>
 	) |>
 	mutate ( year_centered = year - (mean(year)))
 
-#| echo: false
 
-#| label: tbl-one
-#| tbl-cap: "Table one"
 table1 <- tbl_summary(
   health_spending_wide, 
   by = country_name, 
@@ -52,16 +52,25 @@ table1 <- tbl_summary(
 )
 table1
 
-?inline_text()
 
-The median and interquile range for Guyana is `r table1, variable = ext_che, column = Guyana$country_name`
+#?inline_text()
+
 ```
+
+@tbl-one shows the descriptive statistics about Guyana's and Haiti's aid use (shows the median and IQR)
+
+This table shows the median and interquile ranges for the external, government and private aid that Guyana and Haiti utlizes from 2000 to 2023. The values on this table represents the median and IQR. The median and IQR for Guyana's external aid is `r inline_text(table1, variable = ext_che, column = "Guyana")`
 
 
 ```{r}
+#| label: fig-scatterplot
+#| fig-cap: "This scatterplot shows the relationship between Guyana and Haiti's external aid use (in percentage)"
+
 library(ggplot2) 
 
 #Create the scatter plot 
+
+
 
 ggplot (data = health_spending_wide, mapping = aes (x = year, y = ext_che, color = country_name)) + geom_point(size = 3) +
 	labs (title = "External Aid Share of Health Spending Over Time",
@@ -70,12 +79,14 @@ ggplot (data = health_spending_wide, mapping = aes (x = year, y = ext_che, color
 				color = "Country Name") +
 	theme_minimal()
 
-#| label: fig-scatterplot
-#| fig-cap: This scatterplot shows the relationship between Guyana and Haiti's external aid use (in percentage)
-```
 
+```
+@fig-scatterplot shows the years and external share of CHE in percentage and @fig-regression indicates that overtime, Haiti's external aid utilization increased.
 
 ```{r}
+#| label: fig-regression
+#| fig-cap: "The regression analysis shows the relationship between external aid use (in percentage) between Haiti and Guyana."
+
 linear_model <- (lm(ext_che ~ year_centered * country_name, data = health_spending_wide))
 
 tbl_regression(linear_model, intercept = TRUE,
@@ -91,13 +102,11 @@ ggplot(health_spending_wide, aes(x = year_centered, y = ext_che, color = country
 		x = "Year", y = "External Share of CHE (5)",
 		color = "Country"
 	)
-
-#| label: fig-regression
-#| fig-cap: The regression analysis shows the relationship between external aid use (in percentage) between Haiti and Guyana. 
 ```
 
 
 ```{r}
+
 lin_reg <- tbl_regression(linear_model, intercept = TRUE,
 							 label = list(year_centered ~ "Year (trend)",
 							 						 country_name ~ "Country",
@@ -107,7 +116,6 @@ lin_reg
 coef_marker <- inline_text(lin_reg, variable = "(Intercept)", pattern = "{estimate} ({conf.low}, {conf.high})")
 coef_marker
 
-The Intercept from the table is 
 ```
 
 
